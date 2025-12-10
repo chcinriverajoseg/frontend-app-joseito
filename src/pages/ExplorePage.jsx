@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "@/api/axios";
-import Card from "@/ui/Card";
-import Button from "@/ui/Button";
+import Card from "@/ui/Card.jsx";
+import Button from "@/ui/Button.jsx";
 import { useUserContext } from "@/context/UserContext";
 
 export default function ExplorePage() {

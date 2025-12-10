@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import Card from "@/ui/Card";
-import Input from "@/ui/Input";
-import Button from "@/ui/Button";
+import Card from "@/ui/Card.jsx";
+import Input from "@/ui/Input.jsx";
+import Button from "@/ui/Button.jsx";
 import api from "@/api/axios";
 import { useUserContext } from "@/context/UserContext";
 
