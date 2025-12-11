@@ -1,5 +1,6 @@
-import { useState } from "react";
-import axios from "axios";
+/*import { useState } from "react";
+import api from "@/api/axios";
+
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "@/context/UserContext";
 
@@ -79,6 +80,51 @@ export default function Login() {
           {loading ? "Ingresando..." : "Entrar"}
         </button>
       </form>
+    </div>
+  );
+}
+*/
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "@/api/axios";
+import { useUserContext } from "@/context/UserContext";
+import Input from "@/ui/Input";
+import Button from "@/ui/Button";
+
+export default function Login() {
+  const { updateUserContext } = useUserContext();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const handleLogin = async () => {
+    try {
+      setError("");
+      const res = await api.post("/login", { email, password });
+
+      localStorage.setItem("token", res.data.token);
+      updateUserContext(res.data.user);
+
+      navigate("/explore");
+    } catch (err) {
+      console.error(err);
+      setError("Credenciales incorrectas");
+    }
+  };
+
+  return (
+    <div className="max-w-md mx-auto p-6 mt-10 bg-white rounded-xl shadow-lg">
+      <h1 className="text-2xl font-bold mb-4">Iniciar sesión</h1>
+
+      {error && <p className="text-red-500">{error}</p>}
+
+      <Input label="Email" value={email} onChange={e => setEmail(e.target.value)} />
+      <Input label="Contraseña" type="password" value={password} onChange={e => setPassword(e.target.value)} />
+
+      <Button className="w-full mt-4" onClick={handleLogin}>
+        Entrar
+      </Button>
     </div>
   );
 }

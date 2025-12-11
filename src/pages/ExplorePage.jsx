@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+/*import { useEffect, useState } from "react";
 import api from "@/api/axios";
 import Card from "@/ui/Card.jsx";
 import Button from "@/ui/Button.jsx";
@@ -82,4 +82,64 @@ export default function ExplorePage() {
       </div>
     </div>
   );
+}*/
+
+import { useEffect, useState } from "react";
+import api from "@/api/axios";
+import Card from "@/ui/Card";
+import Button from "@/ui/Button";
+import { useUserContext } from "@/context/UserContext";
+
+export default function ExplorePage() {
+  const { user } = useUserContext();
+  const [profiles, setProfiles] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchProfiles = async () => {
+    try {
+      const res = await api.get("/profiles");
+      setProfiles(res.data);
+    } catch (err) {
+      console.error("Error cargando perfiles", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLike = async (id) => {
+    try {
+      await api.post(`/like/${id}`);
+      setProfiles(prev => prev.filter(p => p._id !== id));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfiles();
+  }, []);
+
+  if (loading) return <p className="text-center mt-10">Cargando perfiles...</p>;
+
+  return (
+    <div className="p-4 max-w-xl mx-auto mt-6">
+      <h1 className="text-xl font-bold mb-4 text-center">Explorar</h1>
+
+      {profiles.length === 0 ? (
+        <p className="text-center text-gray-500">No hay más personas por ahora 😊</p>
+      ) : (
+        profiles.map((profile) => (
+          <Card key={profile._id} className="mb-4">
+            <h2 className="text-lg font-semibold">{profile.name}</h2>
+            <p className="text-gray-600">{profile.bio}</p>
+
+            <Button className="mt-3 w-full" onClick={() => handleLike(profile._id)}>
+              ❤️ Me gusta
+            </Button>
+          </Card>
+        ))
+      )}
+    </div>
+  );
 }
+

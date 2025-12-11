@@ -1,7 +1,7 @@
 
 /* eslint-disable */
 
-import { createContext, useContext, useState } from "react";
+/*import { createContext, useContext, useState } from "react";
 
 const UserContext = createContext();
 
@@ -36,4 +36,31 @@ export function useUserContext() {
 // Alias para evitar errores donde pones useUser
 export function useUser() {
   return useUserContext();
+}*/
+
+import { createContext, useContext, useState } from "react";
+
+
+const UserContext = createContext();
+
+
+export function UserProvider({ children }) {
+const [user, setUser] = useState(null);
+
+
+const updateUserContext = (data) => {
+setUser(data);
+};
+
+
+return (
+<UserContext.Provider value={{ user, updateUserContext }}>
+{children}
+</UserContext.Provider>
+);
+}
+
+
+export function useUserContext() {
+return useContext(UserContext);
 }

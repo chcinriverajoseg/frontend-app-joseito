@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+/*import { useEffect, useState } from "react";
+import api from "@/api/axios";
+
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "@/context/UserContext";
 
@@ -55,4 +56,39 @@ export default function MatchesPage() {
       </div>
     </div>
   );
+}*/
+
+import api from "@/api/axios";
+import { useEffect, useState } from "react";
+import Card from "@/ui/Card";
+import { Link } from "react-router-dom";
+
+
+export default function MatchesPage() {
+const [matches, setMatches] = useState([]);
+
+
+useEffect(() => {
+api.get("/matches").then((res) => setMatches(res.data));
+}, []);
+
+
+return (
+<div className="max-w-md mx-auto mt-8 p-4">
+<h1 className="text-xl font-bold mb-4 text-center">Tus Matches</h1>
+
+
+{matches.length === 0 && <p className="text-gray-500 text-center">Todavía no tienes matches 😢</p>}
+
+
+{matches.map((match) => (
+<Link key={match._id} to={`/chat/${match._id}`}>
+<Card className="mb-3 cursor-pointer">
+<h2 className="font-semibold">{match.name}</h2>
+<p className="text-gray-600">Haz clic para chatear</p>
+</Card>
+</Link>
+))}
+</div>
+);
 }
